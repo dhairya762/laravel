@@ -372,6 +372,9 @@ class CartController extends Controller
         foreach ($postData as $product_id => $quantity) {
             $cartItem = CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $product_id)->first();
             $product = Product::find($product_id);
+            if ($quantity < 0) {
+                return redirect('cart')->with('error', "Quantity must be more than 0.");
+            }
             if ($quantity == 0) {
                 $cartItem->delete();
             } else if ($quantity < 0) {
