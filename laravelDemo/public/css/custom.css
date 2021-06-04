@@ -1,0 +1,16 @@
+.d-n{
+    display:none;
+}
+
+.w-5 {
+    display: none;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+th,
+td {
+    text-align: center
+}
