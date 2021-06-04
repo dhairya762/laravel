@@ -411,7 +411,7 @@ class CartController extends Controller
         return redirect('cart')->with('success', "Selected productes are removed successfully.");
     }
 
-    public function placeOrderAction()
+    public function placeOrderAction(Request $request)
     {
         $cart = $this->getCart();
         $cart_item = CartItem::where('cart_id', '=', $cart->id)->get();
@@ -434,6 +434,7 @@ class CartController extends Controller
                 'shipping_amount' => $cart->shipping_amount,
             ]
         );
+        $cart->delete();
         $placeorder = PlaceOrder::where('customer_id', '=', $cart->customer_id)->first();
         foreach ($cart_item as $key => $item) {
             $item_id = $placeorder_item->insertGetId(
@@ -444,22 +445,24 @@ class CartController extends Controller
                     'base_price' => $item->base_price,
                     'price' => $item->price,
                     'discount' => $item->discount,
-                ]
-            );
-        }
-        foreach ($cart_address as $key => $address) {
-            $address_id = $placeorder_address->insertGetId(
-                [
-                    'placeorder_id' => $id,
-                    'address_type' => $address->address_type,
-                    'address' => $address->address,
-                    'city' => $address->city,
-                    'state' => $address->state,
-                    'country' => $address->country,
-                    'zipcode' => $address->zipcode,
-                    'same_as_billing' => $address->same_as_billing,
-                ]
-            );
+                    ]
+                );
+                $item->delete();
+            }
+            foreach ($cart_address as $key => $address) {
+                $address_id = $placeorder_address->insertGetId(
+                    [
+                        'placeorder_id' => $id,
+                        'address_type' => $address->address_type,
+                        'address' => $address->address,
+                        'city' => $address->city,
+                        'state' => $address->state,
+                        'country' => $address->country,
+                        'zipcode' => $address->zipcode,
+                        'same_as_billing' => $address->same_as_billing,
+                        ]
+                    );
+                    $address->delete();
         }
         $customerBillingAddress = $this->getCartBillingAddress();
         if (!$customerBillingAddress) {

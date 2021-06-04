@@ -189,12 +189,12 @@
         </div>
         <div class="col-md text-center">
             <form id="submit_form" action="{{ url('placeorder') }}" method="get">
-                <div class="form-check">
+                {{-- <div class="form-check">
                     <input type="checkbox" name="shipping[save_to_address]" class="form-check-input" id="submit" checked
                         required>
                     <label class="form-check-label" for="submit">I accept that all details are right to my
                         knowledge.</label>
-                </div>
+                </div> --}}
                 <input type="button" value="Confirm Order Details" class="btn btn-success" onclick="mage.setForm('submit_form');">
             </form>
         </div>
