@@ -271,6 +271,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        echo 1;
+        die;
         $category = Category::find($id);
         $childCategories = Category::where('path', 'LIKE', "%{$id}%")->where('id', '!=', $id)->get();
         foreach ($childCategories as $key => $value) {

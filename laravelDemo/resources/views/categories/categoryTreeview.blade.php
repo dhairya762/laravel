@@ -170,7 +170,7 @@
                     $('#cat_del').removeClass('d-n');
                     $('#update-form').attr('action', 'category/update/' + data.id);
                     $('#sub-form').attr('action', 'category/add/' + data.id);
-                    $('#cat_del').attr('href', 'category/destroy/' + data.id);
+                    $('#cat_del').attr('onclick', "mage.setUrl('category/destroy/" + data.id +"').setMethod('get').load()");
                     $('#GFG_DOWN').removeClass('d-n');
                     var name = data.name;
                     var parent_id = data.parent_id;

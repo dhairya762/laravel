@@ -92,28 +92,33 @@ class ProductController extends Controller
     {
         $postData = $request->products;
         if (!$postData['sku']) {
-            return redirect('products/add/' . $id )->with('error', 'Please insert data into SKU field.');
+            return redirect('products/add/' . $id)->with('error', 'Please insert data into SKU field.');
         }
         if (!$postData['name']) {
-            return redirect('products/add/' . $id )->with('error', 'Please insert data into Name field.');
+            return redirect('products/add/' . $id)->with('error', 'Please insert data into Name field.');
         }
         if (!$postData['category']) {
-            return redirect('products/add/' . $id )->with('error', 'Please insert data into Category field.');
+            return redirect('products/add/' . $id)->with('error', 'Please insert data into Category field.');
         }
-        if (!$postData['price']) {
-            return redirect('products/add/' . $id )->with('error', 'Please insert data into Price field.');
+        if ($postData['price'] || $postData['price'] == 0) {
+            if ($postData['price'] <= 0) {
+                return redirect('products/add/' . $id)->with('error', 'Price value must be more than 0');
+            }
+        } else {
+            return redirect('products/add/' . $id)->with('error', 'Please insert data into Price field.');
         }
-        if (!$postData['discount']) {
-            return redirect('products/add/' . $id )->with('error', 'Please insert data into Discount field.');
+        if (!$postData['discount'] || $postData['discount'] < 0) {
+            if ($postData['discount'] < 0) {
+                return redirect('products/add/' . $id)->with('error', 'Discount value must be greater than 0.');
+            }
+            if(!$postData['discount'] && $postData['discount'] != 0) {
+                return redirect('products/add/' . $id)->with('error', 'Please insert data into Discount field.');
+            }
         }
+        print_r($postData);
+        die;
         if (!$postData['status']) {
-            return redirect('products/add/' . $id )->with('error', 'Please insert data into Status field.');
-        }
-        if (!$postData['price'] < 0) {
-            return redirect('products/add/' . $id )->with('error', 'Price value must be more than 0');
-        }
-        if (!$postData['discount'] < 0) {
-            return redirect('products/add/' . $id )->with('error', 'Discount value must be greater than 0.');
+            return redirect('products/add/' . $id)->with('error', 'Please insert data into Status field.');
         }
         $product = Product::find($id);
         if (!$product) {
