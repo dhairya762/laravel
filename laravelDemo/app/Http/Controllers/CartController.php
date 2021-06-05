@@ -78,10 +78,22 @@ class CartController extends Controller
             if (!$customerShippingAddress) {
                 $customerShippingAddress = $this->getCustomerShippingAddress();
             }
-            $cartItem = CartItem::where('cart_id', '=', $cart->id)->get();
+            $cartItem = CartItem::where('cart_id', '=', $cart->id)->first();
+            if (!$cartItem) {
+                $cartItem = null;
+            } else {
+                $cartItem = CartItem::where('cart_id', '=', $cart->id)->get();
+            }
+            $cartBillingAddress = $this->getCartBillingAddress();
+            if (!$cartBillingAddress) {
+                $cartBillingAddress = null;
+            }
+            $cartShippingAddress = $this->getCartShippingAddress();
+            if (!$cartShippingAddress) {
+                $cartShippingAddress = null;
+            }
             if ($cart->customer_id) {
-                // return view('cart.index', compact('model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'));
-                $view = view('cart.index', compact('model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'))->render();
+                $view = view('cart.index', compact('cartShippingAddress', 'cartBillingAddress', 'model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'))->render();
                 $response = [
                     'element' => [
                         [
@@ -99,7 +111,8 @@ class CartController extends Controller
             $cart->customer_id = session('customer_id');
             $customerShippingAddress = $this->getCustomerBillingAddress();
             $customerBillingAddress = $this->getCustomerShippingAddress();
-            $cartItem = new CartItem;
+            // $cartItem = new CartItem;
+            $cartItem = null;
             $shipping = Shipping::find(1);
             $cart->shipping_amount = $shipping->amount;
             $cart->save();
@@ -420,7 +433,10 @@ class CartController extends Controller
     {
         $cart = $this->getCart();
         $cart_item = CartItem::where('cart_id', '=', $cart->id)->get();
+        print_r($cart_item);
         $cart_address = CartAddress::where('cart_id', '=', $cart->id)->get();
+        print_r($cart_address);
+        die;
         $placeorder = new PlaceOrder;
         $placeorder_item = new PlaceOrderItem;
         $placeorder_address = new PlaceOrderAddress;
