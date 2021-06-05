@@ -14,8 +14,10 @@ class Cart extends Model
     public function getTotal($items)
     {
         $total = 0;
-        foreach ($items as $key => $item) {
-            $total += $item->price;
+        if ($items) {
+            foreach ($items as $key => $item) {
+                $total += $item->price;
+            }
         }
         $cart = self::where('customer_id', '=', session('customer_id'))->first();
         $cart->total = $total;
@@ -26,8 +28,10 @@ class Cart extends Model
     public function getTotalDiscount($items)
     {
         $discount = 0;
-        foreach ($items as $key => $item) {
-            $discount += $item->discount;
+        if ($items) {
+            foreach ($items as $key => $item) {
+                $discount += $item->discount;
+            }
         }
         $cart = self::where('customer_id', '=', session('customer_id'))->first();
         $cart->discount = $discount;
@@ -39,7 +43,10 @@ class Cart extends Model
     {
         $finalPrice = 0;
         $cart = self::where('customer_id', '=', session('customer_id'))->first();
-        $finalPrice += ($this->getTotal($items) - $this->getTotalDiscount($items) + $cart->shipping_amount);
+        $finalPrice = $cart->shipping_amount;
+        if ($items) {
+            $finalPrice += ($this->getTotal($items) - $this->getTotalDiscount($items));
+        }
         return $finalPrice;
     }
 

@@ -78,7 +78,6 @@
                 </thead>
                 <tbody>
                     @if ($cartItem)
-                    @if (count($cartItem) > 0) 
                         @foreach ($cartItem as $item)
                             <tr>
                                 <td>{{ $item->cart_id }}</td>
@@ -117,11 +116,10 @@
                             <td colspan="8">No Product added into cart.</td>
                         </tr>
                     @endif
-                    @endif
                 </tbody>
             </table>
             <br><br>
-            @if (count($cartItem) > 0)
+            @if ($cartItem)
                 <input type="button" class="btn btn-success" value="Update" onclick="mage.setForm('cart_item');"id="update _product_quantity">
                 <input type="button" class="btn btn-danger" value="Delete Product" onclick="mage.changeAction('cart_item','cart/delete_product');" id="delete_product">
             @endif
@@ -285,7 +283,7 @@
                     </table>
                 </div>
                 <div class="col-md text-right">
-                    @if ($cart->customer_id != 0 && count($cartItem) > 0 && $cart->payment_method_id != 0 && $cart->shipping_method_id != 0 && $customerBillingAddress && $customerShippingAddress)
+                    @if ($cart->customer_id != 0 && $cartItem && $cart->payment_method_id != 0 && $cart->shipping_method_id != 0 && $cartBillingAddress && $cartShippingAddress)
                         <input type="button" value="Place Order" onclick="mage.setUrl('cart/place_order').setMethod('get').load();" class="btn btn-primary">
                     @endif
                 </div>
