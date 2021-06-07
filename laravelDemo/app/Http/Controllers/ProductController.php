@@ -115,8 +115,6 @@ class ProductController extends Controller
                 return redirect('products/add/' . $id)->with('error', 'Please insert data into Discount field.');
             }
         }
-        print_r($postData);
-        die;
         if (!$postData['status']) {
             return redirect('products/add/' . $id)->with('error', 'Please insert data into Status field.');
         }
