@@ -34,41 +34,42 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('products').setMethod('get').load();" href="javascript:void(0)">Product<span
-                                class="sr-only">(current)</span></a>
+                        <a class="nav-link" onclick="mage.setUrl('products').setMethod('get').load();"
+                            href="javascript:void(0)">Product<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('customers').setMethod('get').removeParam().load();" href="javascript:void(0)">Customer<span class="sr-only"></span></a>
-                    </li>
-                    {{-- <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('categories-new').setMethod('get').removeParam().load();" href="javascript:void(0)">Category<span class="sr-only"></span></a>
-                    </li> --}}
-                    <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('category').setMethod('get').removeParam().load();" href="javascript:void(0)">Category<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('customers').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">Customer<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('payment').setMethod('get').removeParam().load();" href="javascript:void(0)">Payment<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('category').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">Category<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('shipping').setMethod('get').removeParam().load();" href="javascript:void(0)">Shipping<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('payment').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">Payment<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('cart').setMethod('get').removeParam().load();" href="javascript:void(0)">Cart<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('shipping').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">Shipping<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('placeorder').setMethod('get').removeParam().load();" href="javascript:void(0)">PlaceOrder<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('cart').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">Cart<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('csv').setMethod('get').removeParam().load();" href="javascript:void(0)">CSV<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('placeorder').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">PlaceOrder<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="mage.setUrl('salesman').setMethod('get').removeParam().load();" href="javascript:void(0)">SalesMan<span class="sr-only"></span></a>
+                        <a class="nav-link" onclick="mage.setUrl('csv').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">CSV<span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" onclick="mage.setUrl('salesman').setMethod('get').removeParam().load();"
+                            href="javascript:void(0)">SalesMan<span class="sr-only"></span></a>
                     </li>
                 </ul>
-                {{-- <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form> --}}
             </div>
         </nav>
         <div class="clearfix"></div>
