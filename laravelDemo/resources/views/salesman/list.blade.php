@@ -40,7 +40,7 @@
                         @endforeach
                     </tbody>
                 @else
-                    <tr>No salesMan available.</tr>
+                    <tr>No salesMan selected.</tr>
                 @endif
             </table>
         @endif
