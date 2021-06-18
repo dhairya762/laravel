@@ -58,6 +58,12 @@
                     <li class="nav-item active">
                         <a class="nav-link" onclick="mage.setUrl('placeorder').setMethod('get').removeParam().load();" href="javascript:void(0)">PlaceOrder<span class="sr-only"></span></a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" onclick="mage.setUrl('csv').setMethod('get').removeParam().load();" href="javascript:void(0)">CSV<span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" onclick="mage.setUrl('salesman').setMethod('get').removeParam().load();" href="javascript:void(0)">SalesMan<span class="sr-only"></span></a>
+                    </li>
                 </ul>
                 {{-- <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

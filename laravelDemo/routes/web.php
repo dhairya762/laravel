@@ -94,3 +94,20 @@ Route::get('shipping/add/{shipping}', 'App\Http\Controllers\ShippingController@c
 Route::post('shipping/store/{shipping}', 'App\Http\Controllers\ShippingController@store');
 Route::get('shipping/destroy/{shipping}', 'App\Http\Controllers\ShippingController@destroy');
 Route::get('shipping/edit/{shipping}', 'App\Http\Controllers\ShippingController@edit');
+
+//SalesMan
+Route::get('salesman', 'App\Http\Controllers\SalesManController@index');
+Route::post('salesman/search', 'App\Http\Controllers\SalesManController@index');
+Route::post('salesman/create', 'App\Http\Controllers\SalesManController@create');
+Route::get('salesman/salesmanId/{id}', 'App\Http\Controllers\SalesManController@salesManId');
+Route::post('salesman/product', 'App\Http\Controllers\SalesManController@product');
+Route::post('salesman/update/{id}', 'App\Http\Controllers\SalesManController@update');
+Route::get('salesman/clear', 'App\Http\Controllers\SalesManController@clearAction');
+Route::get('salesman/destroy/{id}', 'App\Http\Controllers\SalesManController@destroy');
+
+//CSV
+Route::get('csv', 'App\Http\Controllers\CsvController@index');
+// Route::post('csv/upload', 'App\Http\Controllers\CsvController@upload');
+Route::post('csv/import', 'App\Http\Controllers\CsvController@import');
+// Route::post('csv/export', 'App\Http\Controllers\CsvController@export');
+Route::post('csv/exportIntoCSV', 'App\Http\Controllers\CsvController@exportIntoCSV');
