@@ -1,5 +1,5 @@
-.d-n{
-    display:none;
+.d-n {
+    display: none;
 }
 
 .w-5 {
@@ -13,4 +13,10 @@ body {
 th,
 td {
     text-align: center
+}
+
+.selected {
+    outline-color: transparent;
+    border: 2px solid black !important;
+    font-weight: 600;
 }

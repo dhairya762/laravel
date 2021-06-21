@@ -32,7 +32,8 @@
                                         onclick="mage.setUrl('salesman/destroy/{{ $value->id }}').setMethod('get').resetParams().load()">Delete</button>
                                 </td>
                                 <td>
-                                    <button class="price btn btn-success"
+                                    {{-- <button class="price btn btn-success selected""{{()}}" --}}
+                                    <button class="{{($id == $value->id) ? 'price btn btn-success selected' : 'price btn btn-success'}}"
                                         onclick="mage.setUrl('salesman/salesmanId/{{ $value->id }}').resetParams().setMethod('get').load()"
                                         id="{{ $value->id }}">Pricing</button>
                                 </td>

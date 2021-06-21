@@ -7,6 +7,7 @@ use App\Models\SalesManProductPrice;
 use App\Models\SalesManProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 class SalesManController extends Controller
 {
     /**
@@ -45,23 +46,27 @@ class SalesManController extends Controller
         if (!$currentSalesMan) {
             $currentSalesMan = null;
         }
-        if ($id) {
-            $query = "SELECT salesman_product.sku,
-            salesman_product.id, 
-            salesman_product_price.price  AS spp, 
-            salesman_product_price.discount, 
-            salesman_product_price.salesman_id, 
-            salesman_product_price.salesman_product_id, 
-            salesman_product.price 
-        FROM salesman_product
-        LEFT JOIN `salesman_product_price`
-            ON salesman_product.id = salesman_product_price.salesman_product_id
-            AND salesman_product_price.salesman_id= $id";
-            $products = DB::select($query);
-        } else {
-            $products = SalesManProduct::all();
-        }
-        $view = view('salesman.list', compact('currentSalesMan','salesman', 'products', 'id'))->render();
+        $products = SalesmanProduct::select('salesman_product_price.price as spp', 'salesman_product_price.discount', 'salesman_product_price.salesman_id', 'salesman_product_price.salesman_product_id', 'salesman_product.price', 'salesman_product.sku', 'salesman_product.id')
+            ->leftJoin('salesman_product_price', function ($join) use ($id) {
+                $join->on('salesman_product_price.salesman_product_id', '=', 'salesman_product.id')->where('salesman_product_price.salesman_id', '=', $id);
+            })->get();
+        // if ($id) {
+        //     $query = "SELECT salesman_product.sku,
+        //     salesman_product.id, 
+        //     salesman_product_price.price  AS spp, 
+        //     salesman_product_price.discount, 
+        //     salesman_product_price.salesman_id, 
+        //     salesman_product_price.salesman_product_id, 
+        //     salesman_product.price 
+        // FROM salesman_product
+        // LEFT JOIN `salesman_product_price`
+        //     ON salesman_product.id = salesman_product_price.salesman_product_id
+        //     AND salesman_product_price.salesman_id= $id";
+        //     $products = DB::select($query);
+        // } else {
+        //     $products = SalesManProduct::all();
+        // }
+        $view = view('salesman.list', compact('currentSalesMan', 'salesman', 'products', 'id'))->render();
         $response = [
             'element' => [
                 [
