@@ -1,6 +1,6 @@
 @extends('layouts.theme')
 @section('content')
-    <h1>Hello {{$customerName->first_name}} {{$customerName->last_name}}</h1>
+    <h1>Hello {{ $customerName->first_name }} {{ $customerName->last_name }}</h1>
     <div class="col-md">
         <table class="table">
             <thead>
@@ -185,22 +185,14 @@
     <br><br><br><br>
     <div class="row">
         <div class="col-md-6 text-center">
-            <a href="javascript:void(0)" onclick="mage.setUrl('cart').setMethod('get').load();" class="btn btn-primary text-left">Back to the cart</a>
+            <a href="javascript:void(0)" onclick="mage.setUrl('cart').setMethod('get').load();"
+                class="btn btn-primary text-left">Back to the cart</a>
         </div>
         <div class="col-md text-center">
             <form id="submit_form" action="{{ url('placeorder') }}" method="get">
-                {{-- <div class="form-check">
-                    <input type="checkbox" name="shipping[save_to_address]" class="form-check-input" id="submit" checked
-                        required>
-                    <label class="form-check-label" for="submit">I accept that all details are right to my
-                        knowledge.</label>
-                </div> --}}
-                <input type="button" value="Confirm Order Details" class="btn btn-success" onclick="mage.setForm('submit_form');">
+                <input type="button" value="Confirm Order Details" class="btn btn-success"
+                    onclick="mage.setForm('submit_form');">
             </form>
         </div>
     </div>
-@endsection
-@section('script')
-    <script>
-    </script>
 @endsection

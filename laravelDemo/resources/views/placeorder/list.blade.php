@@ -2,19 +2,17 @@
 
 @section('content')
     <h1>Order List Page</h1>
-    {{-- <input type="button" value="Add" class="btn btn-success" onclick="mage.setUrl('products/add/0').setMethod('get').load();"> --}}
-    
+
     <div class="col-md-2">
         <form id="select_customer" action="{{ url('placeorder') }}" method="get">
             @csrf
             <div class="form-group">
                 <label for="exampleFormControlSelect1">Example select</label>
                 <select name="customer_id" class="form-control" id="exampleFormControlSelect1"
-                onchange="mage.setForm('select_customer')">
+                    onchange="mage.setForm('select_customer')">
                     <option value="0" selected disabled>Select Customer</option>
                     @foreach ($customers as $name)
-                        <option value="{{ $name->id }}"
-                            {{ $name->id == $customer_id ? 'selected' : '' }}>
+                        <option value="{{ $name->id }}" {{ $name->id == $customer_id ? 'selected' : '' }}>
                             {{ $name->first_name }}
                         </option>
                     @endforeach
@@ -98,4 +96,5 @@
                     id="{{ $i }}" onclick="pagination()" class="btn btn-primary">{{ $i }}</a>
             @endfor
         </div>
-    @endsection
+    </div>
+@endsection

@@ -1,7 +1,8 @@
 @extends('layouts.theme')
 
 @section('content')
-    <a href="javascript:void(0)" onclick="mage.setUrl('placeorder').setMethod('get').load();" class="btn btn-success">Back</a>
+    <a href="javascript:void(0)" onclick="mage.setUrl('placeorder').setMethod('get').load();"
+        class="btn btn-success">Back</a>
     <h1>Hello {{ $customerName->first_name }} {{ $customerName->last_name }}</h1>
     <div class="col-md">
         <table class="table">
@@ -43,9 +44,9 @@
                         <td>{{ $item->placeorder_id }}</td>
                         <td>{{ $item->product_id }}</td>
                         @foreach ($product as $item1)
-                        @if ($item1->id == $item->product_id)
-                        <td>{{ $item1->name }}</td>
-                        @endif
+                            @if ($item1->id == $item->product_id)
+                                <td>{{ $item1->name }}</td>
+                            @endif
                         @endforeach
                         <td>{{ $item->quantity }}</td>
                         <td>{{ $item->base_price }}</td>
@@ -190,24 +191,20 @@
                         @endif
                         <tr>
                             <td colspan="3">
-                                <form action="{{ url('placeorder/comments/' . $placeOrder->id) }}" method="post" id="comments">
+                                <form action="{{ url('placeorder/comments/' . $placeOrder->id) }}" method="post"
+                                    id="comments">
                                     @csrf
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label
-                                                for="comment">Comment</label>
-                                            <textarea class="form-control"
-                                                name="comments[comment]"
-                                                id="comment" rows="2"
+                                            <label for="comment">Comment</label>
+                                            <textarea class="form-control" name="comments[comment]" id="comment" rows="2"
                                                 style="resize: none"></textarea>
                                         </div>
 
                                         <div class="form-group col-md-6">
                                             <label for="status">Select
                                                 Status</label>
-                                            <select class="form-control"
-                                                name="comments[status]"
-                                                id="status">
+                                            <select class="form-control" name="comments[status]" id="status">
                                                 <option selected disabled>
                                                     Select Status
                                                 </option>
@@ -226,8 +223,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-12">
-                                            <input type="button" onclick="mage.setForm('comments');"
-                                                class="btn btn-primary" value="Save Comment">
+                                            <input type="button" onclick="mage.setForm('comments');" class="btn btn-primary"
+                                                value="Save Comment">
                                         </div>
                                     </div>
                                 </form>
@@ -260,5 +257,4 @@
             </div>
         </div>
     </div>
-
 @endsection

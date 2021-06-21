@@ -7,7 +7,7 @@
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Example select</label>
                     <select name="customer_id" class="form-control" id="exampleFormControlSelect1"
-                    onchange="mage.setForm('select_customer')">
+                        onchange="mage.setForm('select_customer')">
                         <option value="0" selected disabled>Select Customer</option>
                         @foreach ($customerName as $name)
                             <option value="{{ $name->id }}"
@@ -53,13 +53,14 @@
                 </tbody>
             </table>
             <br><br>
-            <input type="button" class="btn btn-success" value="Add To Cart" id="add_to_cart" onclick="mage.setForm('add_product_form');">
+            <input type="button" class="btn btn-success" value="Add To Cart" id="add_to_cart"
+                onclick="mage.setForm('add_product_form');">
         </form>
     </div>
     <br><br><br><br>
     <div class="col-md">
-        {{-- <a href="{{ url('cart/clear_cart') }}" class="btn btn-danger" onclick="mage.setUrl().setMethod.load()">Clrear Cart</a> --}}
-        <input type="button" value="Clear Cart" onclick="mage.setUrl('cart/clear_cart').setMethod('get').load();" class="btn btn-danger">
+        <input type="button" value="Clear Cart" onclick="mage.setUrl('cart/clear_cart').setMethod('get').load();"
+            class="btn btn-danger">
         <br><br>
         <form action="{{ url('cart/update_product_quantity') }}" method="post" id="cart_item">
             @csrf
@@ -99,17 +100,17 @@
                         <tr>
                             <td colspan="6"></td>
                             <td>Total Quantity</td>
-                            <td>{{$model->getTotalQuantity($cartItem)}}</td>
+                            <td>{{ $model->getTotalQuantity($cartItem) }}</td>
                         </tr>
                         <tr>
                             <td colspan="6"></td>
                             <td>Total Discount</td>
-                            <td>{{$model->getTotalDiscount($cartItem)}}</td>
+                            <td>{{ $model->getTotalDiscount($cartItem) }}</td>
                         </tr>
                         <tr>
                             <td colspan="6"></td>
                             <td>Total Price</td>
-                            <td>{{$model->getTotal($cartItem)}}</td>
+                            <td>{{ $model->getTotal($cartItem) }}</td>
                         </tr>
                     @else
                         <tr>
@@ -120,8 +121,10 @@
             </table>
             <br><br>
             @if ($cartItem)
-                <input type="button" class="btn btn-success" value="Update" onclick="mage.setForm('cart_item');"id="update _product_quantity">
-                <input type="button" class="btn btn-danger" value="Delete Product" onclick="mage.changeAction('cart_item','cart/delete_product');" id="delete_product">
+                <input type="button" class="btn btn-success" value="Update" onclick="mage.setForm('cart_item');"
+                    id="update _product_quantity">
+                <input type="button" class="btn btn-danger" value="Delete Product"
+                    onclick="mage.changeAction('cart_item','cart/delete_product');" id="delete_product">
             @endif
         </form>
     </div>
@@ -169,7 +172,8 @@
                         <input name="billing[save_to_address]" type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Save in Address Book </label>
                     </div>
-                    <input id="save_billing" type="button" value="Save" class="btn btn-success" onclick="mage.setForm('billing_form')">
+                    <input id="save_billing" type="button" value="Save" class="btn btn-success"
+                        onclick="mage.setForm('billing_form')">
                 </form>
             </div>
             <div class="col-md-5 float-right">
@@ -216,10 +220,11 @@
                     </div>
                     <div class="form-check">
                         <input type="checkbox" name="shipping[save_to_address]" class="form-check-input"
-                            id="shipping_save_address_book" >
+                            id="shipping_save_address_book">
                         <label class="form-check-label" for="shipping_save_address_book">Save in AddressBook</label>
                     </div>
-                    <input id="save_shipping" type="button" value="Save" class="btn btn-success" onclick="mage.setForm('shipping_form');">
+                    <input id="save_shipping" type="button" value="Save" class="btn btn-success"
+                        onclick="mage.setForm('shipping_form');">
                 </form>
             </div>
         </div>
@@ -249,7 +254,8 @@
                             <input class="form-check-input" type="radio" name="shipping_method" value="{{ $item->id }}"
                                 id="flexRadioDefault2" onchange="mage.setForm('shipping');"
                                 {{ $cart->shipping_method_id == $item->id ? 'checked' : '' }}>
-                            <label class="form-check-label" for="flexRadioDefault2">{{ $item->name}} => {{$item->description}}</label><br>
+                            <label class="form-check-label" for="flexRadioDefault2">{{ $item->name }} =>
+                                {{ $item->description }}</label><br>
                         @endforeach
                     </div>
                 </form>
@@ -264,11 +270,11 @@
                     <tbody>
                         <tr>
                             <td scope="row">Total Price</td>
-                            <td>{{$model->getTotal($cartItem)}}</td>
+                            <td>{{ $model->getTotal($cartItem) }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Total Discount</td>
-                            <td>{{$model->getTotalDiscount($cartItem)}}</td>
+                            <td>{{ $model->getTotalDiscount($cartItem) }}</td>
                         </tr>
                         <tr>
                             <td scope="row">Shipping Charge</td>
@@ -276,36 +282,37 @@
                         </tr>
                         <tr>
                             <td scope="row">Final Price</td>
-                            <td>{{$model->getFinalPrice($cartItem)}}</td>
+                            <td>{{ $model->getFinalPrice($cartItem) }}</td>
                         </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md text-right">
-                    @if ($cart->customer_id != 0 && $cartItem && $cart->payment_method_id != 0 && $cart->shipping_method_id != 0 && $cartBillingAddress && $cartShippingAddress)
-                        <input type="button" value="Place Order" onclick="mage.setUrl('cart/place_order').setMethod('get').load();" class="btn btn-primary">
-                    @endif
-                </div>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md text-right">
+                @if ($cart->customer_id != 0 && $cartItem && $cart->payment_method_id != 0 && $cart->shipping_method_id != 0 && $cartBillingAddress && $cartShippingAddress)
+                    <input type="button" value="Place Order"
+                        onclick="mage.setUrl('cart/place_order').setMethod('get').load();" class="btn btn-primary">
+                @endif
             </div>
         </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
-        $('#add_product').click(function () {
+        $('#add_product').click(function() {
             $('#product').removeClass('d-n');
         });
 
-        $('#add_to_cart').click(function(){
+        $('#add_to_cart').click(function() {
             $('#product').addClass('d-n');
         });
-        
+
         $('#same_as_billing').change(function() {
-            $('#saddress').attr('disabled',this.checked);
-            $('#scity').attr('disabled',this.checked);
-            $('#sstate').attr('disabled',this.checked);
-            $('#scountry').attr('disabled',this.checked);
-            $('#szipcode').attr('disabled',this.checked);
+            $('#saddress').attr('disabled', this.checked);
+            $('#scity').attr('disabled', this.checked);
+            $('#sstate').attr('disabled', this.checked);
+            $('#scountry').attr('disabled', this.checked);
+            $('#szipcode').attr('disabled', this.checked);
         });
     </script>
 @endsection

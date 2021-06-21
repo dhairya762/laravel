@@ -25,32 +25,33 @@ class PlaceOrderController extends Controller
     public function index(Request $request, $page_no = null)
     {
         $customers = Customers::all();
-        $placeOrder = PlaceOrder::where('customer_id', '=', session('customer_id'))->first();
-
-        if (!$page_no) {
-            $page_no = 1;
+        if ($request->records_per_page) {
+            session(['records_per_page' => $request->records_per_page]);
         }
-        $current_page = $page_no;
-        $recordsPerPage = $request->records_per_page;
-        if ($recordsPerPage) {
-            session(['paginate' => $recordsPerPage]);
+        if ($page_no) {
+            session(['page' => $page_no]);
+        } else {
+            session(['page' => 1]);
         }
-        if ($current_page == 1) {
-            $recordsPerPage = session('paginate');
-            if (!$recordsPerPage) {
-                $recordsPerPage = 1;
-            }
-            session(['paginate' => $recordsPerPage]);
-        }
+        $current_page = session('page');
+        $placeOrder = PlaceOrder::where('customer_id', '=', session('customer_id'))->get();
         $customer_id = $request->customer_id;
         if ($customer_id) {
             $count = PlaceOrder::where('customer_id', '=', $customer_id)->count();
-            $limit = session('paginate');
+            if (session('records_per_page')) {
+                $limit = session('records_per_page');
+            } else {
+                $limit = $count;
+            }
             $offset = ($current_page - 1) * $limit;
             $orders = PlaceOrder::orderBy('id', 'DESC')->where('customer_id', '=', $customer_id)->offset($offset)->limit($limit)->get();
         } else {
             $count = PlaceOrder::count();
-            $limit = session('paginate');
+            if (session('records_per_page')) {
+                $limit = session('records_per_page');
+            } else {
+                $limit = $count;
+            }
             $offset = ($current_page - 1) * $limit;
             $orders = PlaceOrder::orderBy('id', 'DESC')->offset($offset)->limit($limit)->get();
         }
@@ -59,7 +60,7 @@ class PlaceOrderController extends Controller
         } else {
             $totalPage = 0;
         }
-        $view = view('placeorder.list', compact('customer_id', 'totalPage', 'limit', 'offset', 'recordsPerPage', 'orders', 'customers', 'placeOrder'))->render();
+        $view = view('placeorder.list', compact('customer_id', 'totalPage', 'limit', 'offset', 'orders', 'customers', 'placeOrder'))->render();
         $response = [
             'element' => [
                 [
@@ -70,6 +71,7 @@ class PlaceOrderController extends Controller
         ];
         header('content-type:application/json');
         echo json_encode($response);
+        die;
     }
 
     /**
@@ -125,6 +127,7 @@ class PlaceOrderController extends Controller
         ];
         header('content-type:application/json');
         echo json_encode($response);
+        die;
     }
 
     /**
@@ -164,6 +167,10 @@ class PlaceOrderController extends Controller
     public function saveComment(Request $request, $id)
     {
         $postData = $request->comments;
+        $status = $request->status;
+        if (!$status) {
+            return redirect('placeorder/show/' . $id)->with('error', 'Please select status.');
+        }
         $comment = new PlaceOrderComment;
         $comment_id = $comment->insertGetId([
             'placeorder_id' => $id,
@@ -171,6 +178,9 @@ class PlaceOrderController extends Controller
             'status' => $postData['status'],
             'created_at' => Carbon::now(),
         ]);
+        $placeOrder = PlaceOrder::find($id);
+        $placeOrder->updated_at = Carbon::now();
+        $placeOrder->save();
         return redirect('placeorder')->with('success', 'Order status successfully changed.');
     }
 }

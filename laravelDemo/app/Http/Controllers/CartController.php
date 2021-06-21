@@ -14,6 +14,7 @@ use App\Models\CustomersAddress;
 use App\Models\Payment;
 use App\Models\Shipping;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CartController extends Controller
 {
@@ -25,7 +26,17 @@ class CartController extends Controller
 
     public function getCart()
     {
-        $cart = Cart::where('customer_id', '=', session('customer_id'))->first();
+        if (session('customer_id')) {
+            $cart = Cart::where('customer_id', '=', session('customer_id'))->first();
+            if (!$cart) {
+                $cart = Cart::where('customer_id', '=', null)->first();
+                $cart->customer_id = session('customer_id');
+                $cart->save();
+            }
+        }
+        else {
+            $cart = null;
+        }
         return $cart;
     }
 
@@ -55,12 +66,8 @@ class CartController extends Controller
         return $customerShippingAddress;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (!(session('customer_id'))) {
-            session(['customer_id' => 1]);
-            $customer_id = session('customer_id');
-        }
         $model = new Cart;
         $customer_id = session('customer_id');
         $customerName = Customers::where('status', '=', 'Enable')->get();
@@ -92,31 +99,27 @@ class CartController extends Controller
             if (!$cartShippingAddress) {
                 $cartShippingAddress = null;
             }
-            if ($cart->customer_id) {
-                $view = view('cart.index', compact('cartShippingAddress', 'cartBillingAddress', 'model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'))->render();
-                $response = [
-                    'element' => [
-                        [
-                            'selector' => '#content',
-                            'html' => $view
-                        ]
+            $view = view('cart.index', compact('cartShippingAddress', 'cartBillingAddress', 'model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'))->render();
+            $response = [
+                'element' => [
+                    [
+                        'selector' => '#content',
+                        'html' => $view
                     ]
-                ];
-                header('content-type:application/json');
-                echo json_encode($response);
-            }
+                ]
+            ];
+            header('content-type:application/json');
+            echo json_encode($response);
+            die;
         } else {
-
-            $cart = new cart;
-            $cart->customer_id = session('customer_id');
+            $cart = Cart::where('customer_id', '=', null)->first();
+            if (!$cart) {
+                $cart = new cart;
+                $cart->save();
+            }
             $customerShippingAddress = $this->getCustomerBillingAddress();
             $customerBillingAddress = $this->getCustomerShippingAddress();
-            // $cartItem = new CartItem;
             $cartItem = null;
-            $shipping = Shipping::find(1);
-            $cart->shipping_amount = $shipping->amount;
-            $cart->save();
-            // return view('cart.index', compact('model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'));
             $view = view('cart.index', compact('model', 'cartItem', 'products', 'cart', 'payment', 'shipping', 'customerName', 'customerBillingAddress', 'customerShippingAddress'))->render();
             $response = [
                 'element' => [
@@ -128,6 +131,7 @@ class CartController extends Controller
             ];
             header('content-type:application/json');
             echo json_encode($response);
+            die;
         }
     }
 
@@ -143,7 +147,7 @@ class CartController extends Controller
         $postData = $request->billing;
         $postData['cart_id'] = $cart->id;
         $postData['address_type'] = 'billing';
-        if ($postData['save_to_address']) {
+        if (isset($postData['save_to_address'])) {
             $address = $this->getCustomerBillingAddress();
             if ($address) {
                 if ($address->id) {
@@ -219,6 +223,7 @@ class CartController extends Controller
                     $shippingAddress->country = $billingAddress->country;
                     $shippingAddress->zipcode = $billingAddress->zipcode;
                     $shippingAddress->same_as_billing = 1;
+                    $shippingAddress->save();
                 }
             } else {
                 $shippingAddress = new CartAddress;
@@ -255,7 +260,7 @@ class CartController extends Controller
                     $customerShippingAddress->save();
                 }
             }
-            if ($postData['save_to_address']) {
+            if (isset($postData['save_to_address'])) {
                 $address = $this->getCustomerShippingAddress();
                 if ($address) {
                     $address->address = $customerBillingAddress->address;
@@ -278,7 +283,7 @@ class CartController extends Controller
             }
             return redirect('cart')->with('success', "Customer's shipping address successfully saved.");
         } else {
-            if ($postData['save_to_address']) {
+            if (isset($postData['save_to_address'])) {
                 $address = $this->getCustomerShippingAddress();
                 if ($address) {
                     if ($address->id) {
@@ -303,14 +308,12 @@ class CartController extends Controller
             }
             $cartShippingAddress = $this->getCartShippingAddress();
             if ($cartShippingAddress) {
-                $cartShippingAddress->cart_id = $cart->id;
                 $cartShippingAddress->address = $postData['address'];
                 $cartShippingAddress->city = $postData['city'];
                 $cartShippingAddress->state = $postData['state'];
                 $cartShippingAddress->country = $postData['country'];
                 $cartShippingAddress->zipcode = $postData['zipcode'];
-                $cartShippingAddress->address_type = 'shipping';
-                $cartShippingAddress->same_as_billing = 0;
+                $cartShippingAddress->save();
             } else {
                 $cartAddress = new CartAddress;
                 $cartAddress->cart_id = $cart->id;
@@ -388,11 +391,11 @@ class CartController extends Controller
             }
         }
         foreach ($postData as $product_id => $quantity) {
-            $cartItem = CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $product_id)->first();
             $product = Product::find($product_id);
+            $cartItem = CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $product_id)->first();
             if ($quantity == 0) {
                 $cartItem->delete();
-            } else if ($quantity < 0) {
+            } else if ($quantity > 0) {
                 $cartItem->quantity = $quantity;
                 $cartItem->price = $quantity * $product->price;
                 $cartItem->discount = $quantity * $product->discount;
@@ -433,10 +436,7 @@ class CartController extends Controller
     {
         $cart = $this->getCart();
         $cart_item = CartItem::where('cart_id', '=', $cart->id)->get();
-        print_r($cart_item);
         $cart_address = CartAddress::where('cart_id', '=', $cart->id)->get();
-        print_r($cart_address);
-        die;
         $placeorder = new PlaceOrder;
         $placeorder_item = new PlaceOrderItem;
         $placeorder_address = new PlaceOrderAddress;
@@ -445,6 +445,14 @@ class CartController extends Controller
         $customerName = Customers::where('id', '=', $cart->customer_id)->first();
         $paymentMethod = Payment::where('id', '=', $cart->payment_method_id)->first();
         $shippingMethod = Shipping::where('id', '=', $cart->shipping_method_id)->first();
+        $customerBillingAddress = $this->getCartBillingAddress();
+        if (!$customerBillingAddress) {
+            $customerBillingAddress = $this->getCustomerBillingAddress();
+        }
+        $customerShippingAddress = $this->getCartShippingAddress();
+        if (!$customerShippingAddress) {
+            $customerShippingAddress = $this->getCustomerShippingAddress();
+        }
         $id = $placeorder->insertGetId(
             [
                 'customer_id' => $cart->customer_id,
@@ -453,9 +461,9 @@ class CartController extends Controller
                 'payment_method_id' => $cart->payment_method_id,
                 'shipping_method_id' => $cart->shipping_method_id,
                 'shipping_amount' => $cart->shipping_amount,
+                'created_at' => Carbon::now(),
             ]
         );
-        $cart->delete();
         $placeorder = PlaceOrder::where('customer_id', '=', $cart->customer_id)->first();
         foreach ($cart_item as $key => $item) {
             $item_id = $placeorder_item->insertGetId(
@@ -468,7 +476,7 @@ class CartController extends Controller
                     'discount' => $item->discount,
                 ]
             );
-            $item->delete();
+            // $item->delete();
         }
         foreach ($cart_address as $key => $address) {
             $address_id = $placeorder_address->insertGetId(
@@ -483,17 +491,9 @@ class CartController extends Controller
                     'same_as_billing' => $address->same_as_billing,
                 ]
             );
-            $address->delete();
+            // $address->delete();
         }
-        $customerBillingAddress = $this->getCartBillingAddress();
-        if (!$customerBillingAddress) {
-            $customerBillingAddress = $this->getCustomerBillingAddress();
-        }
-        $customerShippingAddress = $this->getCartShippingAddress();
-        if (!$customerShippingAddress) {
-            $customerShippingAddress = $this->getCustomerShippingAddress();
-        }
-        // return view('cart.placeorder', compact('paymentMethod', 'shippingMethod', 'customerName', 'model', 'products', 'cart', 'customerBillingAddress', 'customerShippingAddress', 'cartItem'));
+        // $cart->delete();
         $view = view('cart.placeorder', compact('paymentMethod', 'shippingMethod', 'customerName', 'model', 'products', 'cart', 'customerBillingAddress', 'customerShippingAddress', 'cart_item'))->render();
         $response = [
             'element' => [
@@ -505,6 +505,7 @@ class CartController extends Controller
         ];
         header('content-type:application/json');
         echo json_encode($response);
+        die;
     }
 
     /**
