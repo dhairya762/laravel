@@ -48,9 +48,6 @@ class SalesManController extends Controller
         }
         $products = SalesmanProduct::select('salesman_product_price.price as spp', 'salesman_product_price.discount', 'salesman_product_price.salesman_id', 'salesman_product_price.salesman_product_id', 'salesman_product.price', 'salesman_product.sku', 'salesman_product.id')
             ->leftJoin('salesman_product_price', function ($join) use ($id) {
-                print_r($join);
-                echo 1;
-                die;
                 $join->on('salesman_product_price.salesman_product_id', '=', 'salesman_product.id')->where('salesman_product_price.salesman_id', '=', $id);
             })->get();
         // if ($id) {

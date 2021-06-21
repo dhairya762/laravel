@@ -13,7 +13,12 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $request->session()->flush();
+        $request->session()->forget('customer_id');
+        $request->session()->forget('salesman_id');
+        $request->session()->forget('paginate');
+        $request->session()->forget('page');
+        $request->session()->forget('records_per_page');
+        $request->session()->forget('show');
         return view('dashboard.list');
     }
 
