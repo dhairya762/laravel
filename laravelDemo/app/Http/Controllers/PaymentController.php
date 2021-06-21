@@ -85,27 +85,19 @@ class PaymentController extends Controller
     {
         $postData = $request->payment;
         if (!$postData['name']) {
-            return redirect('payment/add/' . $id )->with('error', 'Please insert data in Name field.');
+            return redirect('payment/add/' . $id)->with('error', 'Please insert data in Name field.');
         }
         if (!$postData['code']) {
-            return redirect('payment/add/' . $id )->with('error', 'Please insert data in Code field.');
+            return redirect('payment/add/' . $id)->with('error', 'Please insert data in Code field.');
         }
         if (!$postData['description']) {
-            return redirect('payment/add/' . $id )->with('error', 'Please insert data in Description field.');
+            return redirect('payment/add/' . $id)->with('error', 'Please insert data in Description field.');
         }
         if (!$postData['status']) {
-            return redirect('payment/add/' . $id )->with('error', 'Please insert data in Status field.');
-        }
-        $code = Payment::where('code', '=', $postData['code'])->first();
-        if ($code) {
-            return redirect('payment/add/' . $id )->with('error', 'Please insert unique data in Code field.');
+            return redirect('payment/add/' . $id)->with('error', 'Please insert data in Status field.');
         }
         $payment = Payment::find($id);
         if (!$payment) {
-            $code = Payment::where('code', '=', $postData['code'])->first();
-            if ($code) {
-                return redirect('payment/add/0')->with('error', 'Code has to be unique please selece unique one.');;
-            }
             $postData['created_at'] = Carbon::now();
             Payment::insertGetId($postData);
             return redirect('payment')->with('success', 'Payment inserted successfully');

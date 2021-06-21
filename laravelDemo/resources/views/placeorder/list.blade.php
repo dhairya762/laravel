@@ -26,12 +26,12 @@
                 <thead>
                     <tr>
                         <th scope="col">OrderId</th>
-                        <th scope="col">ProductId</th>
-                        <th scope="col">ProductName</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Base Price</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">CustomerId</th>
+                        <th scope="col">Total</th>
                         <th scope="col">Discount</th>
+                        <th scope="col">Payment_Method</th>
+                        <th scope="col">Shipping_Method</th>
+                        <th scope="col">Shipping_Amount</th>
                         <th scope="col">Created Date</th>
                         <th scope="col">Updated Date</th>
                         <th scope="col">Action</th>

@@ -105,10 +105,10 @@
                     </h1>
                 </div>
             </footer>
+            <!-- Footer -->
         </div>
     </div>
 </body>
-<!-- Footer -->
 @yield('script')
 
 </html>

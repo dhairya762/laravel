@@ -97,16 +97,8 @@ class ShippingController extends Controller
         if (!$postData['status']) {
             return redirect('shipping/add/' . $id )->with('error', 'Please insert data in Status field.');
         }
-        $code = Shipping::where('code', '=', $postData['code'])->first();
-        if ($code) {
-            return redirect('shipping/add/' . $id )->with('error', 'Please insert unique data in Code field.');
-        }
         $shipping = Shipping::find($id);
         if (!$shipping) {
-            $code = Shipping::where('code', '=', $postData['code'])->first();
-            if ($code) {
-                return redirect('shipping/add/0')->with('error', 'Code has to be unique please selece unique one.');;
-            }
             $postData['created_at'] = Carbon::now();
             Shipping::insertGetId($postData);
             return redirect('shipping')->with('success', 'Shipping inserted successfully');
