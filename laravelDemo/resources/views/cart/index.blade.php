@@ -166,8 +166,7 @@
                             required>
                     </div>
                     <div class="form-check">
-                        <input name="billing[save_to_address]" type="checkbox" class="form-check-input" id="exampleCheck1"
-                            checked>
+                        <input name="billing[save_to_address]" type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Save in Address Book </label>
                     </div>
                     <input id="save_billing" type="button" value="Save" class="btn btn-success" onclick="mage.setForm('billing_form')">
@@ -217,7 +216,7 @@
                     </div>
                     <div class="form-check">
                         <input type="checkbox" name="shipping[save_to_address]" class="form-check-input"
-                            id="shipping_save_address_book" checked>
+                            id="shipping_save_address_book" >
                         <label class="form-check-label" for="shipping_save_address_book">Save in AddressBook</label>
                     </div>
                     <input id="save_shipping" type="button" value="Save" class="btn btn-success" onclick="mage.setForm('shipping_form');">
