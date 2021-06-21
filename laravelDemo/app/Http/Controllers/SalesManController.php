@@ -7,6 +7,7 @@ use App\Models\SalesManProductPrice;
 use App\Models\SalesManProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class SalesManController extends Controller
 {
@@ -142,9 +143,19 @@ class SalesManController extends Controller
      */
     public function update(Request $request, SalesMan $salesMan, $id)
     {
-        $tmpPrice = [];
         $price = $request->input('sprice');
         $discount = $request->input('sdiscount');
+        foreach ($price as $key => $value) {
+            if (!$value) {
+                return redirect('salesman')->with('error', 'Price is invalid for productId = ' . $key . ' and salesmanId = ' . $id .'.');
+            }
+        }
+        foreach ($discount as $key => $value) {
+            if ($value < 0) {
+                return redirect('salesman')->with('error', 'Discount must be positive for productId = ' . $key . ' and salesmanId = ' . $id .'.');
+            }
+        }
+        die;
         if ($price) {
             foreach ($price as $key1 => $value1) {
                 $product = SalesManProduct::find($key1);
@@ -160,12 +171,7 @@ class SalesManController extends Controller
                         $salesman_product_price->salesman_id = $id;
                         $salesman_product_price->save();
                     }
-                } else {
-                    array_push($tmpPrice, $key1);
                 }
-            }
-            if ($tmpPrice) {
-                return redirect('salesman', compact('tmpPrice')); //->with('success', 'SalesmanProductPrice Must Be Greater Then Price.');
             }
         }
         if ($discount) {
@@ -208,6 +214,12 @@ class SalesManController extends Controller
     {
         $products = SalesManProduct::all();
         $postData = $request->salesman_product;
+        if (!$postData['sku']) {
+            return redirect('salesman')->with('error', 'Please enter the appropriate sku data in product table.');
+        }
+        if (!$postData['price']) {
+            return redirect('salesman')->with('error', 'Please enter the appropriate price in product table.');
+        }
         foreach ($products as $key => $value) {
             if ($value->sku == $postData['sku']) {
                 return redirect('salesman')->with('error', 'Sku Must be Unique.');

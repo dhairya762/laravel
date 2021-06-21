@@ -83,10 +83,10 @@ Base.prototype = {
         });
     },
 
-    changeAction:function (form,value) {
+    changeAction:function (form,action) {
         var str1 = '#';
         var id = str1+form;
-        $(id).attr('action',value);
+        $(id).attr('action',action);
         this.setForm(form);
     },
     
