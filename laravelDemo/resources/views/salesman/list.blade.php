@@ -128,9 +128,9 @@
 @section('script')
     <script>
         $('.sprice').change(function(e) {
-            var td = e.target;
-            var value = e.target.value;
-            var price = e.target.parentElement.parentElement.id;
+            var td = $(e.target);
+            var value = $(e.target).val();
+            var price = $(e.target).parent().parent().attr('id');
             if (parseInt(value) < parseInt(price)) {
                 $(td).css("background-color", "red");
                 $('#update').hide();

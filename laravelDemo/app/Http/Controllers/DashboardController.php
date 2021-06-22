@@ -18,6 +18,7 @@ class DashboardController extends Controller
         $request->session()->forget('paginate');
         $request->session()->forget('page');
         $request->session()->forget('records_per_page');
+        $request->session()->forget('search');
         $request->session()->forget('show');
         $request->session()->forget('success');
         $request->session()->forget('error');

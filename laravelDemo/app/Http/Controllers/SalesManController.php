@@ -155,7 +155,6 @@ class SalesManController extends Controller
                 return redirect('salesman')->with('error', 'Discount must be positive for productId = ' . $key . ' and salesmanId = ' . $id .'.');
             }
         }
-        die;
         if ($price) {
             foreach ($price as $key1 => $value1) {
                 $product = SalesManProduct::find($key1);
