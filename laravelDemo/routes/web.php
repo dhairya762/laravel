@@ -103,7 +103,6 @@ Route::get('salesman/salesmanId/{id}', 'App\Http\Controllers\SalesManController@
 Route::post('salesman/product', 'App\Http\Controllers\SalesManController@product');
 Route::post('salesman/update/{id}', 'App\Http\Controllers\SalesManController@update');
 Route::get('salesman/clear', 'App\Http\Controllers\SalesManController@clearAction');
-Route::post('salesman/clear', 'App\Http\Controllers\SalesManController@clearAction');
 Route::get('salesman/destroy/{id}', 'App\Http\Controllers\SalesManController@destroy');
 
 //CSV
