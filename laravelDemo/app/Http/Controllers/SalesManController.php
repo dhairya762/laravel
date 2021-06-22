@@ -8,6 +8,7 @@ use App\Models\SalesManProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
 
 class SalesManController extends Controller
 {
@@ -16,6 +17,8 @@ class SalesManController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // protected $search = null;
+
     public function index(Request $request)
     {
         $show = session('show');
@@ -24,19 +27,23 @@ class SalesManController extends Controller
         }
         $search = $request->input('search');
         if ($search) {
-            $salesman = SalesMan::where('name', 'LIKE', $search)->first();
-            Session(['search' => $search]);
-            Session(['salesman_id' => $salesman->id]);
-            Session(['show' => 0]);
-            $salesman = SalesMan::where('name', 'LIKE', $search)->get();
+            session(['search' => $search]);
+            session(['show' => 0]);
+            Session::save();
+            $salesman = SalesMan::where('name', 'LIKE', '%' . $search . '%')->get();
         } else {
             if (session('search')) {
-                $salesman = SalesMan::where('name', '=', session('search'))->get();
+                $search = session('search');
+                if (!$search) {
+                    $search = null;
+                }
+                $salesman = SalesMan::where('name', 'LIKE', '%' . $search . '%')->get();
             } else {
+                $search = Null;
                 $salesman = SalesMan::all();
-            }
-            if (!$salesman) {
-                $salesman = NULL;
+                if (!$salesman) {
+                    $salesman = NULL;
+                }
             }
         }
         $id = session('salesman_id');
@@ -47,10 +54,14 @@ class SalesManController extends Controller
         if (!$currentSalesMan) {
             $currentSalesMan = null;
         }
-        $products = SalesmanProduct::select('salesman_product_price.price as spp', 'salesman_product_price.discount', 'salesman_product_price.salesman_id', 'salesman_product_price.salesman_product_id', 'salesman_product.price', 'salesman_product.sku', 'salesman_product.id')
+        if ($id) {
+            $products = SalesmanProduct::select('salesman_product_price.price as spp', 'salesman_product_price.discount', 'salesman_product_price.salesman_id', 'salesman_product_price.salesman_product_id', 'salesman_product.price', 'salesman_product.sku', 'salesman_product.id')
             ->leftJoin('salesman_product_price', function ($join) use ($id) {
                 $join->on('salesman_product_price.salesman_product_id', '=', 'salesman_product.id')->where('salesman_product_price.salesman_id', '=', $id);
             })->get();
+        } else {
+            $products = SalesManProduct::all();
+        }
         // if ($id) {
         //     $query = "SELECT salesman_product.sku,
         //     salesman_product.id, 
@@ -67,7 +78,7 @@ class SalesManController extends Controller
         // } else {
         //     $products = SalesManProduct::all();
         // }
-        $view = view('salesman.list', compact('currentSalesMan', 'salesman', 'products', 'id'))->render();
+        $view = view('salesman.list', compact('search', 'currentSalesMan', 'salesman', 'products', 'id'))->render();
         $response = [
             'element' => [
                 [
@@ -81,7 +92,7 @@ class SalesManController extends Controller
 
         header('content-type:application/json');
         echo json_encode($response);
-        // die;
+        die;
     }
 
     /**
@@ -147,12 +158,12 @@ class SalesManController extends Controller
         $discount = $request->input('sdiscount');
         foreach ($price as $key => $value) {
             if (!$value) {
-                return redirect('salesman')->with('error', 'Price is invalid for productId = ' . $key . ' and salesmanId = ' . $id .'.');
+                return redirect('salesman')->with('error', 'Price is invalid for productId = ' . $key . ' and salesmanId = ' . $id . '.');
             }
         }
         foreach ($discount as $key => $value) {
             if ($value < 0) {
-                return redirect('salesman')->with('error', 'Discount must be positive for productId = ' . $key . ' and salesmanId = ' . $id .'.');
+                return redirect('salesman')->with('error', 'Discount must be positive for productId = ' . $key . ' and salesmanId = ' . $id . '.');
             }
         }
         if ($price) {
@@ -183,7 +194,6 @@ class SalesManController extends Controller
                 }
             }
         }
-        // session(['show' => 0]);
         return redirect('salesman')->with('success', 'SalesmanProductPrice Updated SuccessFully');
     }
 
@@ -198,7 +208,6 @@ class SalesManController extends Controller
         //
         $salesman = SalesMan::find($id);
         $salesman->delete();
-        // session(['show' => 0]);
         return redirect('salesman')->with('success', 'Salesman Deleted SuccessFully.');
     }
 
@@ -214,24 +223,28 @@ class SalesManController extends Controller
         $products = SalesManProduct::all();
         $postData = $request->salesman_product;
         if (!$postData['sku']) {
+            // session(['error' => 'Please enter the appropriate sku data in product table.']);
             return redirect('salesman')->with('error', 'Please enter the appropriate sku data in product table.');
         }
         if (!$postData['price']) {
+            // session(['error' => 'Please enter the appropriate price in product table.']);
             return redirect('salesman')->with('error', 'Please enter the appropriate price in product table.');
         }
         foreach ($products as $key => $value) {
             if ($value->sku == $postData['sku']) {
+                // session(['error' => 'Sku Must be Unique.']);
                 return redirect('salesman')->with('error', 'Sku Must be Unique.');
             }
         }
         $product = SalesManProduct::insert($postData);
-        return redirect('salesman')->with('success', 'SalesManProduct Inserted SuccessFully.');
+        return redirect('salesman')->with('success', 'SalesManProduct Inserted successfully');
     }
-
+    
     public function clearAction(Request $request)
     {
         $request->session()->forget('search');
+        $request->session()->forget('salesman_id');
         session(['show' => 0]);
-        return redirect('salesman');
+        return redirect('salesman')->with('success', 'Search cleared successfully');
     }
 }

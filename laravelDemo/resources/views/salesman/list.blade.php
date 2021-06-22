@@ -5,11 +5,11 @@
             <form action="{{ url('salesman/search') }}" method="post" id="salesman">
                 @csrf
                 <div class="input-group">
-                    <input type="search" id="form1" name="search" class="form-control" />
-                    <input type="button" id="search" class="btn btn-primary" value="Search">&nbsp;&nbsp;
-                    <input type="button" class="btn btn-success" id="add" value="Add">&nbsp;&nbsp;
+                    <input type="search" id="form1" name="search" class="form-control" value="{{$search != null ? $search : ''}}" />
+                    <input type="button" id="search" class="btn btn-primary" onclick="mage.setForm('salesman');" value="Search">&nbsp;&nbsp;
+                    <input type="button" class="btn btn-success" id="add" value="Add" onclick="mage.changeAction('salesman', 'salesman/create')">&nbsp;&nbsp;
                     <input type="button" class="btn btn-success" id="clear" value="Clear" {{-- onclick="mage.setUrl('salesman', 'salesman/create');">&nbsp;&nbsp; --}}
-                        onclick="mage.setUrl('salesman/clear').setMethod('get').resetParams().load();">&nbsp;&nbsp;
+                        onclick="mage.setUrl('salesman/clear').setMethod('get').resetParams().load();">
                 </div>
             </form>
             <br><br>
@@ -130,6 +130,7 @@
         $('.sprice').change(function(e) {
             var td = $(e.target);
             var value = $(e.target).val();
+            // var price = e.target.parentElement.parentElement.id;
             var price = $(e.target).parent().parent().attr('id');
             if (parseInt(value) < parseInt(price)) {
                 $(td).css("background-color", "red");
@@ -153,14 +154,16 @@
             $('#search').show();
             $('#add').show();
         });
+
         if (!data) {
             $('#search').attr('onclick', "mage.setForm('salesman')");
             $('#search').hide();
             $('#add').hide();
-        } else {
-            $('#search').attr('onclick', "mage.setForm('salesman')");
-            $('#add').attr('onclick', "mage.changeAction('salesman', 'salesman/create');");
-        }
+        } 
+        // else {
+        //     $('#search').attr('onclick', "mage.setForm('salesman')");
+        //     $('#add').attr('onclick', "mage.changeAction('salesman', 'salesman/create');");
+        // }
         // $('#update').click(function() {
         //     $('#salesman_product').attr('action', 'salesman/update/<?= $id ?>');
         //     $('#salesman_product').attr('onclick', mage.setForm('salesman_product'));
