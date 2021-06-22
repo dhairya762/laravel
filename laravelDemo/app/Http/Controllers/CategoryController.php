@@ -54,7 +54,7 @@ class CategoryController extends Controller
     {
         $category = new Category;
             $post['name'] = $request->input('name');
-            $post['parent_id'] = $request->get('parent_id');
+            $post['parent_id'] = $request->get('id');
         if ($post['parent_id'] == NULL) {
             $post['parent_id'] = 0;
         }

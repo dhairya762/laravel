@@ -59,7 +59,7 @@
                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <strong>Parent Category:</strong>
-                                            <select name="parent_id" id="parentName" class="form-control">
+                                            <select name="id" id="parentName" class="form-control">
                                                 <option value="0">Root Category</option>
                                                 @foreach ($allCategories as $value)
                                                     @php
@@ -100,7 +100,9 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
                                         <label for="sub-parentName">Parent Category</label>
-                                        <select name="parent_id" id="sub-parentName" class="form-control">
+                                        <input type="hidden" name="id" id="sub-parent_id">
+                                        <input type="text" id="sub-parent_name" name="name" class="form-control" placeholder="Name" disabled>
+                                        {{-- <select name="parent_id" id="sub-parentName" class="form-control">
                                             <option id="sub-parent_id" value="0">Root Category</option>
                                             @foreach ($allCategories as $value)
                                                 @php
@@ -117,7 +119,7 @@
                                                     @endforeach
                                                 </option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +166,8 @@
                     $('#update-category').addClass('d-n');
                     // document.getElementById("add-category").className = "btn btn-success add d-n";
                     // document.getElementById("update-category").className = "col-md-6 d-n";
-                    document.getElementById("update-category").className = "d-n";
+                    $('#update-category').addClass('d-n');
+                    // document.getElementById("update-category").className = "d-n";
                     // $('.add-category').className = "btn btn-success add d-n";
                     $('#add-sub-category').removeClass('d-n');
                     $('#cat_del').removeClass('d-n');
@@ -175,10 +178,17 @@
                     var name = data.name;
                     var parent_id = data.parent_id;
                     var id = data.id;
+                    $("#parentName").val(parent_id);
+                    $("#sub-parentName").val(id);
+                    $("#sub-parent_id").val(id);
+                    $("#sub-parent_name").val(name);
+                    $("#name").val(name);
+                    console.log(name);
+                    console.log(parent_id);
                     console.log(id);
-                    document.getElementById("parentName").value = parent_id;
-                    document.getElementById("sub-parentName").value = id;
-                    document.getElementById("name").value = name;
+                    // document.getElementById("parentName").value = parent_id;
+                    // document.getElementById("sub-parentName").value = id;
+                    // document.getElementById("name").value = name;
                 }
             });
         }
