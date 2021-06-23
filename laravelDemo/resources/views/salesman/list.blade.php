@@ -5,9 +5,12 @@
             <form action="{{ url('salesman/search') }}" method="post" id="salesman">
                 @csrf
                 <div class="input-group">
-                    <input type="search" id="form1" name="search" class="form-control" value="{{$search != null ? $search : ''}}" />
-                    <input type="button" id="search" class="btn btn-primary" onclick="mage.setForm('salesman');" value="Search">&nbsp;&nbsp;
-                    <input type="button" class="btn btn-success" id="add" value="Add" onclick="mage.changeAction('salesman', 'salesman/create')">&nbsp;&nbsp;
+                    <input type="search" id="form1" name="search" class="form-control"
+                        value="{{ $search != null ? $search : '' }}" />
+                    <input type="button" id="search" class="btn btn-primary" onclick="mage.setForm('salesman');"
+                        value="Search">&nbsp;&nbsp;
+                    <input type="button" class="btn btn-success" id="add" value="Add"
+                        onclick="mage.changeAction('salesman', 'salesman/create')">&nbsp;&nbsp;
                     <input type="button" class="btn btn-success" id="clear" value="Clear" {{-- onclick="mage.setUrl('salesman', 'salesman/create');">&nbsp;&nbsp; --}}
                         onclick="mage.setUrl('salesman/clear').setMethod('get').resetParams().load();">
                 </div>
@@ -31,7 +34,6 @@
                                             onclick="mage.setUrl('salesman/destroy/{{ $value->id }}').setMethod('get').resetParams().load()">Delete</button>
                                     </td>
                                     <td>
-                                        {{-- <button class="price btn btn-success selected""{{()}}" --}}
                                         <button
                                             class="{{ $id == $value->id ? 'price btn btn-success selected' : 'price btn btn-success' }}"
                                             onclick="mage.setUrl('salesman/salesmanId/{{ $value->id }}').resetParams().setMethod('get').load()"
@@ -40,15 +42,14 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                    @else
-                        <center>
-                            <strong>
-                                No Salesman Available.
-                            </strong>
-                        </center>
-                        </tr>
                     @endif
                 </table>
+            @else
+                <center>
+                    <strong>
+                        No Salesman Available.
+                    </strong>
+                </center>
             @endif
         </div>
         <div class="col-md-6">
@@ -119,7 +120,6 @@
     </div>
     @php
     $show = session('show');
-    // $id = session('salesman_id');
     if (!$show) {
         $show = 0;
     }
@@ -159,14 +159,6 @@
             $('#search').attr('onclick', "mage.setForm('salesman')");
             $('#search').hide();
             $('#add').hide();
-        } 
-        // else {
-        //     $('#search').attr('onclick', "mage.setForm('salesman')");
-        //     $('#add').attr('onclick', "mage.changeAction('salesman', 'salesman/create');");
-        // }
-        // $('#update').click(function() {
-        //     $('#salesman_product').attr('action', 'salesman/update/<?= $id ?>');
-        //     $('#salesman_product').attr('onclick', mage.setForm('salesman_product'));
-        // })
+        }
     </script>
 @endsection

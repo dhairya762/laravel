@@ -28,9 +28,15 @@ class SalesManController extends Controller
         $search = $request->input('search');
         if ($search) {
             session(['search' => $search]);
+            session::forget('salesman_id');
             session(['show' => 0]);
             Session::save();
-            $salesman = SalesMan::where('name', 'LIKE', '%' . $search . '%')->get();
+            $salesman = SalesMan::where('name', 'LIKE', '%' . $search . '%')->first();
+            if ($salesman) {
+                $salesman = SalesMan::where('name', 'LIKE', '%' . $search . '%')->get();
+            } else {
+                $salesman = null;
+            }
         } else {
             if (session('search')) {
                 $search = session('search');
