@@ -5,7 +5,7 @@
             <form action="{{ url('salesman/search') }}" method="post" id="salesman">
                 @csrf
                 <div class="input-group">
-                    <input type="search" id="form1" name="search" class="form-control"
+                    <input type="search" id="form1" name="search" class="form-control" placeholder="Search/Add"
                         value="{{ $search != null ? $search : '' }}" />
                     <input type="button" id="search" class="btn btn-primary" onclick="mage.setForm('salesman');"
                         value="Search">&nbsp;&nbsp;
