@@ -14,7 +14,6 @@ class CsvController extends Controller
 
     public function index(Request $request)
     {
-
         $view = view('csv.form')->render();
         $response = [
             'element' => [
