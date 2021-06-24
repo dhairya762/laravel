@@ -11,6 +11,7 @@ class CsvController extends Controller
 {
     protected $header = [];
     protected $data = [];
+
     public function index(Request $request)
     {
 
@@ -148,7 +149,7 @@ class CsvController extends Controller
     public function import(Request $request)
     {
         Excel::import(new ProductImport, $request->image);
-        return Redirect('csv')->with("success","Records imports successfully.");
+        return Redirect('csv')->with("success", "Records imports successfully.");
     }
 
     public function exportIntoCSV()

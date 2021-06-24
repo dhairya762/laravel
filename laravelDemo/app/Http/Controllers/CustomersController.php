@@ -6,6 +6,7 @@ use App\Models\Customers;
 use App\Models\CustomersAddress;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 
@@ -68,7 +69,6 @@ class CustomersController extends Controller
         echo json_encode($response);
 
     }
-    // }
 
     public function create($id)
     {
@@ -90,6 +90,7 @@ class CustomersController extends Controller
     public function store(Request $request, $id)
     {
         $postData = $request->customers;
+        
         if (!$postData['first_name']) {
             return redirect('customers/add/'. $id )->with('error', 'Please insert data into First Name.');
         }

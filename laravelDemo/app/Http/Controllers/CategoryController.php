@@ -234,7 +234,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->name = $request->input("name");
-        $category->parent_id = $request->input("parent_id");
+        $category->parent_id = $request->input("id");
         if (!$category->parent_id) {
             $category->parent_id = 0;
         }
@@ -297,4 +297,5 @@ class CategoryController extends Controller
         }
         return redirect('category')->with('Category deleted successfully.');
     }
+
 }
